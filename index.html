@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ИБ | лаб | 5</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="wrapper">
+        <h1>Тест на простоту Rabin-Miller</h1>
+      </div>
+    </header>
+    <main>
+      <div class="wrapper">
+        <section>
+          <h2>1) Сгенерируем случайное n-битовое число p</h2>
+          <button id="bitNumberGenerate">Генерировать</button>
+          <div id="bitNumber" class="bit-number">101010101010101010101</div>
+        </section>
+        <section>
+          <h2>
+            2) Установите старший и младший биты равными 1. (Старший бит
+            гарантирует требуемую длину простого числа, а младший бит
+            обеспечивает его нечетность.)
+          </h2>
+          <div id="bitNumberResult" class="bit-number">
+            101010101010101010101
+          </div>
+          <div class="number-result">
+            <div>p =</div>
+            <div id="numberResult" class="bit-number">1234567</div>
+          </div>
+        </section>
+        <section>
+          <h2>
+            3) Убедитесь, что p не делиться на небольшие простые числа: 3, 5 7,
+            11, и т.д. Во многих реализациях проверяется делимость p на все
+            простые числа, меньшие 256. Наиболее эффективной является проверка
+            на делимость для всех простых чисел, меньших 2000. Это может быть
+            эффективно выполнено с помощью колеса.
+          </h2>
+          <label for="maxPrime">
+            Максимальное число
+            <input id="maxPrime" type="number" min="2" value="20"
+          /></label>
+          <div class="valid-result" id="validResult"></div>
+        </section>
+        <section>
+          <h2>
+            4) Выполните тест Rabin-Miller для некоторого случайного числа a.
+            Если p проходит тест, сгенерируйте другое случайное a и повторите
+            проверку. Выбирайте небольшие значения a для ускорения вычислений.
+            Выполните пять тестов. (Одного может показаться достаточным, но
+            выполните пять.) Если p проходит одной из проверок, сгенерируйте
+            другое p и попробуйте снова.
+            <h3>Шаги проверки Rabin–Miller</h3>
+            <div>
+              Вычислите b - число делений p - 1 на 2 (т.е., 2<sup>b</sup> - это
+              наибольшая степень числа 2,<br />
+              на которое делиться p - 1).<br />
+              Затем вычислите m, такое что p = 1 + 2<sup>b</sup> * m.
+            </div>
+            <ol>
+              <li>Выберите случайное целое a в диапазоне [10000, p−1].</li>
+              <li>Установите j = 0 и z = a*m mod p.</li>
+              <li>
+                Если z = 1 или если z = p - 1, то p проходит проверку и может
+                быть простым числом.
+              </li>
+              <li>Если j > 0 и z = 1, то p не является простым числом.</li>
+              <li>
+                Установите j = j + 1. Если j < b и z (p - 1, установите z =
+                z<sup>2</sup> mod p и вернитесь на этап (4). Если z = p - 1, то
+                p проходит проверку и может быть простым числом.)
+              </li>
+              <li>Если j = b и z ≠ p - 1, то p не является простым числом.</li>
+            </ol>
+          </h2>
+
+          <div class="controls">
+            <label for="testCount">
+              Количество тестов:
+              <input id="testCount" type="number" min="1" max="10" value="5" />
+            </label>
+            <button id="runTests">Выполнить тесты</button>
+          </div>
+
+          <div class="test-results">
+            <h3>Результаты тестов:</h3>
+            <div id="testResultsOutput"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+:root {
+  --main: rgb(0, 136, 255);
+  --text: white;
+}
+
+body {
+  background-color: aliceblue;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 1200px;
+}
+
+header {
+  background-color: rgb(0, 136, 255);
+  color: white;
+  text-align: center;
+  padding: 4rem 0;
+}
+
+h2 {
+  border-bottom: 2px solid black;
+  padding-bottom: 1rem;
+  font-size: 1rem;
+}
+
+main {
+  padding: 4rem 0;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  section {
+    min-height: 30vh;
+    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+ol {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+input {
+  width: 10rem;
+  height: 3rem;
+  border-radius: 0.4rem;
+  border: none;
+  padding: 1rem;
+  font-weight: 600;
+  border: 1px solid #007bff;
+}
+
+button {
+  width: 10rem;
+  height: 3rem;
+  border-radius: 0.4rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.1s ease-in;
+  font-weight: 600;
+  background-color: var(--main);
+  color: var(--text);
+}
+
+button:hover {
+  background-color: rgb(55, 108, 255);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  transform: scale(1.03);
+}
+
+button:active {
+  background-color: rgb(26, 196, 253);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4) inset;
+  transform: scale(0.97);
+}
+
+.bit-number {
+  background-color: white;
+  width: 16rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.number-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.valid-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 20px 0;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+.controls label {
+  margin-right: 15px;
+}
+
+.controls input {
+  border: 1px solid #007bff;
+}
+
+.result {
+  margin-top: 5px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.test-results {
+  margin-top: 20px;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 0.4rem;
+}
+
+input[readonly] {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border: 1px solid #007bff;
+}
+
+@media (max-width: 1200px) {
+  .wrapper {
+    margin: 0 auto;
+    width: 800px;
+  }
+}
