@@ -20,6 +20,8 @@ bitNumberGenerate.addEventListener("click", () => {
     p += 2;
     console.log(p);
   }
+
+  rabinMiller(p, testCount.value);
 });
 
 function randomValueA(min, max) {
@@ -99,9 +101,52 @@ function checkValidP(pValue, arrayValues) {
   return true;
 }
 
-function rabinMiller() {
-  for (let i = 0; i < testCount.value; i++) {
-    let a = randomNumberBit(10000, p);
-    let z = sumMod(a, m, p);
+function mValueAndValueB(pValue) {
+  let b = 1;
+  let m = Math.floor((pValue - 1) / 2);
+  console.log(m);
+
+  for (let i = 2; i < pValue; i++) {
+    if (m % Math.pow(2, i) === 0) {
+      b++;
+      m /= 2;
+    } else break;
+  }
+  return [b, m];
+}
+
+function rabinMiller(pValue, testCount) {
+  let [b, m] = mValueAndValueB(pValue);
+  console.log("bValue:", b, "mValue:", m);
+
+  for (let i = 0; i < testCount; i++) {
+    let a = randomValueA(10000, pValue);
+    let z = sumMod(a, m, pValue);
+
+    if (z === 1 || z === pValue - 1) {
+      console.log(`Тест ${i + 1} пройден: a = ${a}, z = ${z}`);
+      continue;
+    } else {
+      for (let j = 0; j < b; j++) {
+        z = sumMod(a, m, Math.pow(j, 2) * m, pValue);
+        if (z === pValue - 1) {
+          console.log(`Тест ${i + 1} пройден на шаге ${j}: a = ${a}, z = ${z}`);
+          break;
+        }
+        if (j > 0 && z === 1) {
+          console.log(
+            `Тест ${i + 1} не пройден: a = ${a}, z = ${z} на шаге ${j}`
+          );
+          break;
+        }
+        if (j === b && z !== pValue - 1) {
+          console.log(`Тест ${i + 1} не пройден: a = ${a}, финальное z = ${z}`);
+          break;
+        }
+      }
+    }
+    console.log(
+      `Все ${testCount} тестов пройдены. Число вероятно простое: p = ${pValue}`
+    );
   }
 }
