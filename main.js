@@ -1,28 +1,78 @@
 const bitNumberGenerate = document.getElementById("bitNumberGenerate");
 const bitNumber = document.getElementById("bitNumber");
 const bitNumberResult = document.getElementById("bitNumberResult");
+const validP = document.getElementById("validP");
 const numberResult = document.getElementById("numberResult");
 const maxPrime = document.getElementById("maxPrime");
 const validResult = document.getElementById("validResult");
 const testCount = document.getElementById("testCount");
+const bAndMOutput = document.getElementById("bAndMOutput");
+const aValueMin = document.getElementById("aValueMin");
+const interalA = document.getElementById("interalA");
 
 let arrayPrime = [];
 let p = null;
+let pTemp = null;
+
+let [b, m] = [null, null];
+let minA = null;
+let maxA = null;
 
 bitNumberGenerate.addEventListener("click", () => {
-  console.log(maxPrime.value);
-  p = randomNumberBit(21);
+  init();
+});
 
+function init() {
+  p = randomNumberBit(21);
+  pTemp = p;
+
+  validResult.innerHTML = "";
+}
+
+validP.addEventListener("click", () => {
+  p = pTemp;
   arrayPrime = isPrimeArray(maxPrime.value);
   validResult.innerHTML = "";
 
   while (!checkValidP(p, arrayPrime)) {
     p += 2;
-    console.log(p);
   }
 
-  rabinMiller(p, testCount.value);
+  aValueMin.max = p - 2;
+
+  [b, m] = mValueAndValueB(p);
+
+  setIntervalA(aValueMin.value, p);
 });
+
+maxPrime.addEventListener("change", () => {
+  if (Number(maxPrime.value) < maxPrime.min || isNaN(maxPrime.value)) {
+    maxPrime.value = maxPrime.min;
+  }
+});
+
+testCount.addEventListener("change", () => {
+  if (Number(testCount.value) < testCount.min || isNaN(testCount.value)) {
+    testCount.value = testCount.min;
+  }
+});
+
+aValueMin.addEventListener("change", () => {
+  if (Number(aValueMin.value) < aValueMin.min) {
+    aValueMin.value = aValueMin.min;
+  }
+  if (aValueMin.value > maxA - 1) {
+    aValueMin.value = maxA - 1;
+  }
+  setIntervalA(aValueMin.value, p);
+});
+
+function setIntervalA(aValue, pValue) {
+  minA = aValue;
+  maxA = pValue - 1;
+
+  interalA.textContent = `a ∈ [${minA}, ${maxA}]`;
+}
 
 function randomValueA(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -93,34 +143,62 @@ function checkValidP(pValue, arrayValues) {
       validResult.innerHTML += `<div class="valid-result-item">${pValue} % ${
         arrayValues[i]
       } = ${pValue % arrayValues[i]} ❌</div>`;
+
       return false;
     }
   }
 
-  validResult.innerHTML += `<div class="valid-result-item">${pValue}  ✅</div>`;
+  validResult.innerHTML += `<div class="valid-result-item">p = ${pValue}  ✅</div>`;
+
   return true;
 }
 
 function mValueAndValueB(pValue) {
   let b = 1;
   let m = Math.floor((pValue - 1) / 2);
-  console.log(m);
+
+  bAndMOutput.innerHTML = "";
+
+  const table = document.createElement("table");
+  table.className = "b-table-m";
+  const headerRow = document.createElement("tr");
+  const thB = document.createElement("th");
+  thB.textContent = "b";
+  const thM = document.createElement("th");
+  thM.textContent = "m";
+  headerRow.appendChild(thB);
+  headerRow.appendChild(thM);
+  table.appendChild(headerRow);
+
+  createRowTableBAndM(table, b, m);
 
   for (let i = 2; i < pValue; i++) {
     if (m % Math.pow(2, i) === 0) {
       b++;
       m /= 2;
+
+      createRowTableBAndM(table, b, m);
     } else break;
   }
+
+  bAndMOutput.appendChild(table);
   return [b, m];
 }
 
-function rabinMiller(pValue, testCount) {
-  let [b, m] = mValueAndValueB(pValue);
-  console.log("bValue:", b, "mValue:", m);
+function createRowTableBAndM(table, bValue, mValue) {
+  const tr = document.createElement("tr");
+  const tdBValue = document.createElement("td");
+  tdBValue.innerHTML = `${bValue}`;
+  const tdMValue = document.createElement("td");
+  tdMValue.innerHTML = `${mValue}`;
+  tr.appendChild(tdBValue);
+  tr.appendChild(tdMValue);
+  table.appendChild(tr);
+}
 
+function rabinMiller(pValue, testCount) {
   for (let i = 0; i < testCount; i++) {
-    let a = randomValueA(10000, pValue);
+    let a = randomValueA(minA, maxA);
     let z = sumMod(a, m, pValue);
 
     if (z === 1 || z === pValue - 1) {
@@ -128,7 +206,7 @@ function rabinMiller(pValue, testCount) {
       continue;
     } else {
       for (let j = 0; j < b; j++) {
-        z = sumMod(a, m, Math.pow(j, 2) * m, pValue);
+        z = sumMod(a, m, Math.pow(z, 2) * m, pValue);
         if (z === pValue - 1) {
           console.log(`Тест ${i + 1} пройден на шаге ${j}: a = ${a}, z = ${z}`);
           break;
@@ -150,3 +228,5 @@ function rabinMiller(pValue, testCount) {
     );
   }
 }
+
+init();

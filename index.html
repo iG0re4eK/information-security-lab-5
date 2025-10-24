@@ -16,8 +16,10 @@
       <div class="wrapper">
         <section>
           <h2>1) Сгенерируем случайное n-битовое число p</h2>
-          <button id="bitNumberGenerate">Генерировать</button>
-          <div id="bitNumber" class="bit-number">101010101010101010101</div>
+          <div class="row">
+            <div id="bitNumber" class="bit-number">101010101010101010101</div>
+            <button id="bitNumberGenerate">Генерировать</button>
+          </div>
         </section>
         <section>
           <h2>
@@ -41,10 +43,13 @@
             на делимость для всех простых чисел, меньших 2000. Это может быть
             эффективно выполнено с помощью колеса.
           </h2>
-          <label for="maxPrime">
-            Максимальное число
-            <input id="maxPrime" type="number" min="2" value="256"
-          /></label>
+          <div class="row">
+            <label for="maxPrime">
+              Максимальное число
+              <input id="maxPrime" type="number" min="2" value="256" /></label
+            ><button id="validP">Проверить</button>
+          </div>
+
           <div class="valid-result" id="validResult"></div>
         </section>
         <section>
@@ -60,10 +65,12 @@
               Вычислите b - число делений p - 1 на 2 (т.е., 2<sup>b</sup> - это
               наибольшая степень числа 2,<br />
               на которое делиться p - 1).<br />
+              <br />
               Затем вычислите m, такое что p = 1 + 2<sup>b</sup> * m.
             </div>
+            <div class="test-results"><div id="bAndMOutput"></div></div>
             <ol>
-              <li>Выберите случайное целое a в диапазоне [10000, p−1].</li>
+              <li>Выберите случайное целое a в диапазоне [2, p−1].</li>
               <li>Установите j = 0 и z = a*m mod p.</li>
               <li>
                 Если z = 1 или если z = p - 1, то p проходит проверку и может
@@ -82,8 +89,16 @@
           <div class="controls">
             <label for="testCount">
               Количество тестов:
-              <input id="testCount" type="number" min="1" max="10" value="5" />
+              <input id="testCount" type="number" min="1" value="5" />
             </label>
+            <div class="row">
+              <label for="aValueMin">
+                Минимальное a:
+                <input id="aValueMin" type="number" min="2" value="2" />
+              </label>
+              <div class="interval-a" id="interalA">a ∈ [2, p-1]</div>
+            </div>
+
             <button id="runTests">Выполнить тесты</button>
           </div>
 
