@@ -16,6 +16,7 @@ body {
 
 .wrapper {
   margin: 0 auto;
+  padding: 0.5em;
   width: 1200px;
 }
 
@@ -240,17 +241,25 @@ input[readonly] {
 
 @media (max-width: 1200px) {
   .wrapper {
-    width: 800px;
+    width: 876px;
   }
 }
 
 @media (max-width: 876px) {
   .wrapper {
-    width: 600px;
+    width: 576px;
   }
 }
 
 @media (max-width: 576px) {
+  body {
+    font-size: 12px;
+  }
+
+  h2 {
+    font-size: 14px;
+  }
+
   .wrapper {
     width: 450px;
   }
