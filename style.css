@@ -17,7 +17,8 @@ body {
 .wrapper {
   margin: 0 auto;
   padding: 0.5em;
-  width: 1200px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 header {
@@ -262,6 +263,15 @@ input[readonly] {
   }
 
   .wrapper {
-    width: 450px;
+    width: 100%;
+    padding: 0.5em 1em;
+  }
+
+  header {
+    padding: 2rem 0;
+  }
+
+  main {
+    padding: 2rem 0;
   }
 }
