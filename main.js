@@ -196,7 +196,7 @@ function rabinMiller(pValue, testCount) {
     let z = sumMod(a, m, pValue);
     addStep(
       stepsDiv,
-      `Вычисляем z = a*m mod p = ${a}*${m} mod ${pValue} = ${z}`
+      `Вычисляем z = a<sup>m</sup> mod p = ${a}<sup>${m}</sup> mod ${pValue} = ${z}`
     );
 
     let testPassed = false;
@@ -262,7 +262,7 @@ function rabinMiller(pValue, testCount) {
 function addStep(container, text) {
   const stepDiv = document.createElement("div");
   stepDiv.className = "step";
-  stepDiv.textContent = text;
+  stepDiv.innerHTML = text;
   container.appendChild(stepDiv);
 }
 
