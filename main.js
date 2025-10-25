@@ -9,92 +9,14 @@ const testCount = document.getElementById("testCount");
 const bAndMOutput = document.getElementById("bAndMOutput");
 const aValueMin = document.getElementById("aValueMin");
 const interalA = document.getElementById("interalA");
+const runTests = document.getElementById("runTests");
 
 let arrayPrime = [];
 let p = null;
 let pTemp = null;
-
 let [b, m] = [null, null];
 let minA = null;
 let maxA = null;
-
-bitNumberGenerate.addEventListener("click", () => {
-  init();
-});
-
-function init() {
-  p = randomNumberBit(21);
-  pTemp = p;
-
-  validResult.innerHTML = "";
-}
-
-validP.addEventListener("click", () => {
-  p = pTemp;
-  arrayPrime = isPrimeArray(maxPrime.value);
-  validResult.innerHTML = "";
-
-  while (!checkValidP(p, arrayPrime)) {
-    p += 2;
-  }
-
-  aValueMin.max = p - 2;
-
-  [b, m] = mValueAndValueB(p);
-
-  setIntervalA(aValueMin.value, p);
-});
-
-maxPrime.addEventListener("change", () => {
-  if (Number(maxPrime.value) < maxPrime.min || isNaN(maxPrime.value)) {
-    maxPrime.value = maxPrime.min;
-  }
-});
-
-testCount.addEventListener("change", () => {
-  if (Number(testCount.value) < testCount.min || isNaN(testCount.value)) {
-    testCount.value = testCount.min;
-  }
-});
-
-aValueMin.addEventListener("change", () => {
-  if (Number(aValueMin.value) < aValueMin.min) {
-    aValueMin.value = aValueMin.min;
-  }
-  if (aValueMin.value > maxA - 1) {
-    aValueMin.value = maxA - 1;
-  }
-  setIntervalA(aValueMin.value, p);
-});
-
-function setIntervalA(aValue, pValue) {
-  minA = aValue;
-  maxA = pValue - 1;
-
-  interalA.textContent = `a ∈ [${minA}, ${maxA}]`;
-}
-
-function randomValueA(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function sumMod(a, x, n) {
-  let p = 1;
-  let i = x;
-
-  while (i > 0) {
-    const s = i % 2;
-
-    if (s === 1) {
-      p = (p * a) % n;
-    }
-
-    a = (a * a) % n;
-    i = Math.floor((i - s) / 2);
-  }
-
-  return p;
-}
 
 function randomNumberBit(size) {
   let result = [];
@@ -112,6 +34,10 @@ function randomNumberBit(size) {
   numberResult.textContent = parseInt(result.join(""), 2);
   return parseInt(result.join(""), 2);
 }
+
+bitNumberGenerate.addEventListener("click", () => {
+  init();
+});
 
 function isPrime(number) {
   if (number <= 1) return false;
@@ -151,6 +77,57 @@ function checkValidP(pValue, arrayValues) {
   validResult.innerHTML += `<div class="valid-result-item">p = ${pValue}  ✅</div>`;
 
   return true;
+}
+
+maxPrime.addEventListener("change", () => {
+  if (Number(maxPrime.value) < maxPrime.min || isNaN(maxPrime.value)) {
+    maxPrime.value = maxPrime.min;
+  }
+});
+
+testCount.addEventListener("change", () => {
+  if (Number(testCount.value) < testCount.min || isNaN(testCount.value)) {
+    testCount.value = testCount.min;
+  }
+});
+
+aValueMin.addEventListener("change", () => {
+  if (aValueMin.value < aValueMin.min) {
+    aValueMin.value = aValueMin.min;
+  }
+  if (aValueMin.value > maxA - 1) {
+    aValueMin.value = maxA - 1;
+  }
+  setIntervalA(aValueMin.value, p);
+});
+
+function setIntervalA(aValue, pValue) {
+  minA = Number(aValue);
+  maxA = pValue - 1;
+
+  interalA.textContent = `a ∈ [${minA}, ${maxA}]`;
+}
+
+function randomValueA(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function sumMod(a, x, n) {
+  let p = 1;
+  let i = x;
+
+  while (i > 0) {
+    const s = i % 2;
+
+    if (s === 1) {
+      p = (p * a) % n;
+    }
+
+    a = (a * a) % n;
+    i = Math.floor((i - s) / 2);
+  }
+
+  return p;
 }
 
 function mValueAndValueB(pValue) {
@@ -197,36 +174,136 @@ function createRowTableBAndM(table, bValue, mValue) {
 }
 
 function rabinMiller(pValue, testCount) {
+  const testResultsOutput = document.getElementById("testResultsOutput");
+  testResultsOutput.innerHTML = "";
+
+  const testResultsText = document.getElementById("testResultsText");
+  testResultsText.innerHTML = "";
+
+  let testPassedText = true;
+
   for (let i = 0; i < testCount; i++) {
+    const testDiv = document.createElement("div");
+    testDiv.className = "test-case";
+    testDiv.innerHTML = `<h4>Тест ${i + 1}</h4>`;
+
+    const stepsDiv = document.createElement("div");
+    stepsDiv.className = "test-steps";
+
     let a = randomValueA(minA, maxA);
+    addStep(stepsDiv, `a = ${a} `);
+
     let z = sumMod(a, m, pValue);
+    addStep(
+      stepsDiv,
+      `Вычисляем z = a*m mod p = ${a}*${m} mod ${pValue} = ${z}`
+    );
+
+    let testPassed = false;
 
     if (z === 1 || z === pValue - 1) {
-      console.log(`Тест ${i + 1} пройден: a = ${a}, z = ${z}`);
-      continue;
+      addStep(stepsDiv, `✅ z = ${z} (равно 1 или p-1), тест пройден`);
+      testPassed = true;
     } else {
+      addStep(stepsDiv, `z = ${z} (не равно 1 или p-1), продолжаем проверку`);
+
       for (let j = 0; j < b; j++) {
-        z = sumMod(a, m, Math.pow(z, 2) * m, pValue);
+        addStep(stepsDiv, `Шаг j = ${j}`);
+
+        z = sumMod(z, z, pValue);
+        addStep(stepsDiv, `z = z² mod p = ${z}² mod ${pValue} = ${z}`);
+
         if (z === pValue - 1) {
-          console.log(`Тест ${i + 1} пройден на шаге ${j}: a = ${a}, z = ${z}`);
-          break;
-        }
-        if (j > 0 && z === 1) {
-          console.log(
-            `Тест ${i + 1} не пройден: a = ${a}, z = ${z} на шаге ${j}`
+          addStep(
+            stepsDiv,
+            `✅ z = ${z} (равно p-1), тест пройден на шаге j = ${j}`
           );
+          testPassed = true;
           break;
         }
-        if (j === b && z !== pValue - 1) {
-          console.log(`Тест ${i + 1} не пройден: a = ${a}, финальное z = ${z}`);
+
+        if (j > 0 && z === 1) {
+          addStep(stepsDiv, `❌ j > 0 (j = ${j}) и z = 1, тест НЕ пройден`);
+          testPassed = false;
+          testPassedText = false;
           break;
+        }
+
+        if (j === b - 1 && z !== pValue - 1) {
+          addStep(
+            stepsDiv,
+            `❌ j = b-1 (j = ${j}) и z ≠ p-1 (z = ${z}), тест НЕ пройден`
+          );
+          testPassed = false;
+          testPassedText = false;
         }
       }
     }
-    console.log(
-      `Все ${testCount} тестов пройдены. Число вероятно простое: p = ${pValue}`
-    );
+
+    const resultDiv = document.createElement("div");
+    resultDiv.className = testPassed ? "test-passed" : "test-failed";
+    resultDiv.innerHTML = testPassed ? `Тест ${i + 1} ✅` : `Тест ${i + 1} ❌`;
+
+    testDiv.appendChild(stepsDiv);
+    testDiv.appendChild(resultDiv);
+    testResultsOutput.appendChild(testDiv);
   }
+
+  const finalResult = document.createElement("div");
+  finalResult.className = "final-result";
+  finalResult.classList.toggle("test-passed", testPassedText);
+  finalResult.classList.toggle("test-failed", !testPassedText);
+  finalResult.innerHTML = testPassedText
+    ? `<h3>Все ${testCount} тестов завершены</h3>`
+    : `<h3>Не все ${testCount} тестов завершены</h3>`;
+  testResultsText.appendChild(finalResult);
 }
+
+function addStep(container, text) {
+  const stepDiv = document.createElement("div");
+  stepDiv.className = "step";
+  stepDiv.textContent = text;
+  container.appendChild(stepDiv);
+}
+
+function init() {
+  p = randomNumberBit(21);
+  pTemp = p;
+
+  arrayPrime = isPrimeArray(maxPrime.value);
+  validResult.innerHTML = "";
+  testResultsOutput.innerHTML = "";
+  testResultsText.innerHTML = "";
+
+  while (!checkValidP(p, arrayPrime)) {
+    p += 2;
+  }
+
+  aValueMin.max = p - 2;
+
+  [b, m] = mValueAndValueB(p);
+
+  setIntervalA(aValueMin.value, p);
+}
+
+validP.addEventListener("click", () => {
+  p = pTemp;
+  arrayPrime = isPrimeArray(maxPrime.value);
+  validResult.innerHTML = "";
+
+  while (!checkValidP(p, arrayPrime)) {
+    p += 2;
+  }
+
+  aValueMin.max = p - 2;
+
+  [b, m] = mValueAndValueB(p);
+
+  setIntervalA(aValueMin.value, p);
+});
+
+runTests.addEventListener("click", () => {
+  rabinMiller(p, testCount.value);
+});
 
 init();
