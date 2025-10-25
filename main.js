@@ -208,10 +208,13 @@ function rabinMiller(pValue, testCount) {
       addStep(stepsDiv, `z = ${z} (не равно 1 или p-1), продолжаем проверку`);
 
       for (let j = 0; j < b; j++) {
-        addStep(stepsDiv, `Шаг j = ${j}`);
+        addStep(stepsDiv, `j = ${j}`);
 
         z = sumMod(z, z, pValue);
-        addStep(stepsDiv, `z = z² mod p = ${z}² mod ${pValue} = ${z}`);
+        addStep(
+          stepsDiv,
+          `z = z<sup>2</sup> mod p = ${z}² mod ${pValue} = ${z}`
+        );
 
         if (z === pValue - 1) {
           addStep(
