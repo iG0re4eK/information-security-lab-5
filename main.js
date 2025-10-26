@@ -174,13 +174,20 @@ function createRowTableBAndM(table, bValue, mValue) {
 }
 
 function rabinMiller(pValue, testCount) {
+  const testStartText = document.getElementById("testStartText");
+  testStartText.innerHTML = "<h3>Результаты тестов:</h3>";
+
   const testResultsOutput = document.getElementById("testResultsOutput");
   testResultsOutput.innerHTML = "";
+
+  const containerOutput = testResultsOutput.parentElement;
+  containerOutput.classList.add("test-results");
 
   const testResultsText = document.getElementById("testResultsText");
   testResultsText.innerHTML = "";
 
   let testPassedText = true;
+  let testNotPassed = 0;
 
   for (let i = 0; i < testCount; i++) {
     const testDiv = document.createElement("div");
@@ -229,6 +236,7 @@ function rabinMiller(pValue, testCount) {
           addStep(stepsDiv, `❌ j > 0 (j = ${j}) и z = 1, тест НЕ пройден`);
           testPassed = false;
           testPassedText = false;
+          testNotPassed++;
           break;
         }
 
@@ -239,6 +247,7 @@ function rabinMiller(pValue, testCount) {
           );
           testPassed = false;
           testPassedText = false;
+          testNotPassed++;
         }
       }
     }
@@ -258,7 +267,7 @@ function rabinMiller(pValue, testCount) {
   finalResult.classList.toggle("test-failed", !testPassedText);
   finalResult.innerHTML = testPassedText
     ? `<h3>Все ${testCount} тестов завершены</h3>`
-    : `<h3>Не все ${testCount} тестов завершены</h3>`;
+    : `<h3>${testNotPassed} тест(а) не пройден(о)</h3>`;
   testResultsText.appendChild(finalResult);
 }
 
@@ -277,6 +286,9 @@ function init() {
   validResult.innerHTML = "";
   testResultsOutput.innerHTML = "";
   testResultsText.innerHTML = "";
+  testStartText.innerHTML = "";
+  const containerOutput = testResultsOutput.parentElement;
+  containerOutput.classList.remove("test-results");
 
   while (!checkValidP(p, arrayPrime)) {
     p += 2;
