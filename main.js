@@ -267,7 +267,7 @@ function rabinMiller(pValue, testCount) {
   finalResult.classList.toggle("test-failed", !testPassedText);
   finalResult.innerHTML = testPassedText
     ? `<h3>Все ${testCount} тестов завершены</h3>`
-    : `<h3>${testNotPassed} тест(а) не пройден(о)</h3>`;
+    : `<h3>${testNotPassed} не пройден(о)</h3>`;
   testResultsText.appendChild(finalResult);
 }
 
