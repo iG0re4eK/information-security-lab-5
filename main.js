@@ -1,3 +1,4 @@
+const bit = document.getElementById("bit");
 const bitNumberGenerate = document.getElementById("bitNumberGenerate");
 const bitNumber = document.getElementById("bitNumber");
 const bitNumberResult = document.getElementById("bitNumberResult");
@@ -78,6 +79,15 @@ function checkValidP(pValue, arrayValues) {
 
   return true;
 }
+
+bit.addEventListener("change", () => {
+  if (Number(bit.value) < bit.min || isNaN(bit.value)) {
+    bit.value = bit.min;
+  }
+  if (Number(bit.value) > bit.max || isNaN(bit.value)) {
+    bit.value = bit.max;
+  }
+});
 
 maxPrime.addEventListener("change", () => {
   if (Number(maxPrime.value) < maxPrime.min || isNaN(maxPrime.value)) {
@@ -173,6 +183,10 @@ function createRowTableBAndM(table, bValue, mValue) {
   table.appendChild(tr);
 }
 
+function veroiatnost() {
+  return;
+}
+
 function rabinMiller(pValue, testCount) {
   const testStartText = document.getElementById("testStartText");
   testStartText.innerHTML = "<h3>Результаты тестов:</h3>";
@@ -217,7 +231,7 @@ function rabinMiller(pValue, testCount) {
       for (let j = 0; j < b; j++) {
         addStep(stepsDiv, `j = ${j}`);
 
-        z = sumMod(z, z, pValue);
+        z = sumMod(z, 2, pValue);
         addStep(
           stepsDiv,
           `z = z<sup>2</sup> mod p = ${z}² mod ${pValue} = ${z}`
@@ -266,7 +280,10 @@ function rabinMiller(pValue, testCount) {
   finalResult.classList.toggle("test-passed", testPassedText);
   finalResult.classList.toggle("test-failed", !testPassedText);
   finalResult.innerHTML = testPassedText
-    ? `<h3>Все ${testCount} тестов завершены</h3>`
+    ? `<div class="row"><h3>Все ${testCount} тестов завершены.</h3> <h3>Вероятность составного числа: ${Math.pow(
+        1 / 4,
+        testCount
+      )}</h3> </div>`
     : `<h3>${testNotPassed} не пройден(о)</h3>`;
   testResultsText.appendChild(finalResult);
 }
@@ -279,10 +296,11 @@ function addStep(container, text) {
 }
 
 function init() {
-  p = randomNumberBit(21);
+  p = randomNumberBit(Number(bit.value));
   pTemp = p;
 
   arrayPrime = isPrimeArray(maxPrime.value);
+
   validResult.innerHTML = "";
   testResultsOutput.innerHTML = "";
   testResultsText.innerHTML = "";
